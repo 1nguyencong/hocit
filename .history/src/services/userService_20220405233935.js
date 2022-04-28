@@ -3,18 +3,7 @@ import bcrypt from 'bcryptjs';
 
 const salt = bcrypt.genSaltSync(10);
 
-let hashUesrPassword = (password) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let hashPassword = await bcrypt.hashSync(password, salt);
-            resolve(hashPassword)
-        } catch (e) {
-            reject(e);
-        }
-    })
-}
-
-let handUserleLogin = (email, password) => {
+let handUserleLogin = (email, password) => {    
     return new Promise(async (resolve, reject) => {
         try {
             let userData = {};
@@ -31,7 +20,7 @@ let handUserleLogin = (email, password) => {
                     userData.errCode = 0,
                     userData.errMessage = 'chinh xac',
                     delete user.password,
-                    userData.user = user; 
+                    userData.user = user;
                 } else {
                     userData.errCode = 3,
                     userData.errMessage = 'mat khau khong chinh xac'
@@ -51,8 +40,21 @@ let handUserleLogin = (email, password) => {
     })
 }
 
+let hashUesrPassword = (password) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let hashPassword = await bcrypt.hashSync(password, salt);
+            resolve(hashPassword)
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+
+
 let checkUserEmail = (userEmail) => {
-    return new Promise(async(resolve, reject) => {
+    return new Promise( async (resolve, reject) => {
         try {
             let user = await db.User.findOne({
                 where: { email: userEmail }
@@ -72,7 +74,7 @@ let getAllUsers = (userId) => {
     return new Promise(async (resolve, reject) => {
         try {
             let users = '';
-            if (userId == 'ALL') {
+            if (userId === 'ALL') {
                 users = await db.User.findAll({
                     attributes: {
                         exclude: ['password']
@@ -97,32 +99,55 @@ let getAllUsers = (userId) => {
 let createNewUser = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let check = await checkUserEmail(email)
+            let check = await checkUserEmail(data.email); 
             if(check === true) {
                 resolve ({
                     errCode: 1,
-                    message: 'email cua ban da duoc su dung, lam on sang email khac'
+                    errMessage: 'email cua ban da duoc su dung, lam on sang email khac'
                 })
-            } 
-            let hashPasswordFrombcrypt = await hashUesrPassword(data.password);
-            await db.User.create({
-                email: data.email,
-                password: hashPasswordFrombcrypt,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                address: data.address,
-                phonenumber: data.phoneNumber,
-                gender: data.gender === '1'? true : false,
-                roleId: data.role,
-            })
-            resolve({
-                errCode: 0,
-                message: 'Ok'
-            });
+            } else {
+                let hashPasswordFrombcrypt = await hashUesrPassword(data.password);
+                await db.User.create({
+                    email: data.email,
+                    password: hashPasswordFrombcrypt,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    address: data.address,
+                    phonenumber: data.phoneNumber,
+                    gender: data.gender === '1'? true : false,
+                    roleId: data.role,
+                })
+                resolve({
+                    errCode: 0,
+                    message: 'Ok'
+                });
+            }
 
         } catch (e) {
             reject(e)
         }
+    })
+}
+
+let deleteUser= (userId) => {
+    return new Promise(async (resolve, reject) => {
+        let user = await db.User.findOne({
+            where: { id: userId}
+        })
+        if (!user) {
+            resolve({
+                errCode: 2,
+                errMessage: 'nguoi dung ko ton tai'
+            })
+        }
+        await db.User.destroy({
+            where: { id: userId}
+        })
+
+        resolve({
+            errCode: 0,
+            Message: 'nguoi dung da bi xoa'
+        })
     })
 }
 module.exports = {
@@ -130,4 +155,5 @@ module.exports = {
     getAllUsers: getAllUsers,
     createNewUser: createNewUser,
     checkUserEmail: checkUserEmail,
+    deleteUser: deleteUser,
 }

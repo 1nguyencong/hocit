@@ -66,8 +66,7 @@ let handleEditUser = async (req, res) => {
 
 let getAllCode = async (req, res) => {
     try {
-        let data = await userService.getAllCodeService(req.query.type);
-        console.log(' check data', data)
+        let data = await userService.getAllCodeService();
         return res.status(200).json(data)
 
     } catch (e) {

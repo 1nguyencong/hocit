@@ -3,17 +3,6 @@ import bcrypt from 'bcryptjs';
 
 const salt = bcrypt.genSaltSync(10);
 
-let hashUesrPassword = (password) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let hashPassword = await bcrypt.hashSync(password, salt);
-            resolve(hashPassword)
-        } catch (e) {
-            reject(e);
-        }
-    })
-}
-
 let handUserleLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -31,7 +20,7 @@ let handUserleLogin = (email, password) => {
                     userData.errCode = 0,
                     userData.errMessage = 'chinh xac',
                     delete user.password,
-                    userData.user = user; 
+                    userData.user = user;
                 } else {
                     userData.errCode = 3,
                     userData.errMessage = 'mat khau khong chinh xac'
@@ -51,8 +40,21 @@ let handUserleLogin = (email, password) => {
     })
 }
 
+let hashUesrPassword = (password) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let hashPassword = await bcrypt.hashSync(password, salt);
+            resolve(hashPassword)
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+
+
 let checkUserEmail = (userEmail) => {
-    return new Promise(async(resolve, reject) => {
+    return new Promise( async (resolve, reject) => {
         try {
             let user = await db.User.findOne({
                 where: { email: userEmail }
@@ -97,13 +99,15 @@ let getAllUsers = (userId) => {
 let createNewUser = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let check = await checkUserEmail(email)
-            if(check === true) {
-                resolve ({
-                    errCode: 1,
-                    message: 'email cua ban da duoc su dung, lam on sang email khac'
-                })
-            } 
+            // let check = await checkUserEmail(data.email); 
+            // if(check === true) {
+            //     resolve ({
+            //         errCode: 1,
+            //         errMessage: 'email cua ban da duoc su dung, lam on sang email khac'
+            //     })
+            // } else {
+
+            // }
             let hashPasswordFrombcrypt = await hashUesrPassword(data.password);
             await db.User.create({
                 email: data.email,
@@ -119,7 +123,6 @@ let createNewUser = (data) => {
                 errCode: 0,
                 message: 'Ok'
             });
-
         } catch (e) {
             reject(e)
         }

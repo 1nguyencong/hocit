@@ -1,6 +1,5 @@
 import db from "../models/index"
 import bcrypt from 'bcryptjs';
-import res from "express/lib/response";
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -11,11 +10,11 @@ let handUserleLogin = (email, password) => {
             let isExist = await checkUserEmail(email)
             if (isExist) {
                 let user = await db.User.findOne({
-                    attributes: ['email','roleId', 'password','firstName', 'lastName'],
+                    attributes: ['email','roleId', 'password'],
                     where: {email: email},
                     raw: true
                 })
-                if (user) {                 
+                if (user) {                
                 let check = await bcrypt.compareSync(password, user.password);
                 if (check) {
                     userData.errCode = 0,
@@ -189,28 +188,6 @@ let updateUserData = (data) => {
     })
 }
 
-let getAllCodeService = (typeInput) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            if(!typeInput) {
-                resolve({
-                    errCode: 1,
-                    errMessage: 'missing required parameters'
-                })
-            }
-            let res = {};
-            let allcode = await db.Allcode.findAll({
-                where: {type: typeInput}
-            });
-            res.errCode = 0;
-            res.data = allcode;
-            resolve(res);
-        } catch (e) {
-            reject(e)
-        }
-    })
-}
-
 module.exports = {
     handUserleLogin: handUserleLogin,
     getAllUsers: getAllUsers,
@@ -218,5 +195,4 @@ module.exports = {
     checkUserEmail: checkUserEmail,
     deleteUser: deleteUser,
     updateUserData: updateUserData,
-    getAllCodeService: getAllCodeService,
 }

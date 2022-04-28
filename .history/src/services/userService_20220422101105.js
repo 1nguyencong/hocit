@@ -15,7 +15,7 @@ let handUserleLogin = (email, password) => {
                     where: {email: email},
                     raw: true
                 })
-                if (user) {                 
+                if (user) {                
                 let check = await bcrypt.compareSync(password, user.password);
                 if (check) {
                     userData.errCode = 0,

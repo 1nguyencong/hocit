@@ -23,8 +23,6 @@ let initWebRouters = (app) => {
     router.post('/api/create-new-user', userControllers.handleCreateNewUser);
     router.put('/api/edit-user', userControllers.handleEditUser);
     router.delete('/api/delete-user', userControllers.handleDeleteUser);
-    
-    router.get('/api/allcode', userControllers.getAllCode);
 
     return app.use("/", router);
 }

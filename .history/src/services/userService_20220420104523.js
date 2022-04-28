@@ -11,11 +11,11 @@ let handUserleLogin = (email, password) => {
             let isExist = await checkUserEmail(email)
             if (isExist) {
                 let user = await db.User.findOne({
-                    attributes: ['email','roleId', 'password','firstName', 'lastName'],
+                    attributes: ['email','roleId', 'password'],
                     where: {email: email},
                     raw: true
                 })
-                if (user) {                 
+                if (user) {                
                 let check = await bcrypt.compareSync(password, user.password);
                 if (check) {
                     userData.errCode = 0,
