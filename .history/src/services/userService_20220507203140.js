@@ -168,16 +168,14 @@ let updateUserData = (data) => {
                 raw: false
             })
             if (user) { 
-                user.firstName = data.firstName;
-                user.lastName = data.lastName;
-                user.address = data.address;
-                user.roleId = data.roleId;
-                user.positionId = data.positionId;
-                user.gender = data.gender;
-                user.phonenumber = data.phoneNumber;
-                if (data.avatar) {
-                    user.image = data.avatar;
-                }
+                user.firstName = data.firstName,
+                user.lastName = data.lastName,
+                user.address = data.address,
+                user.roleId = data.roleId,
+                user.positionId = data.positionId,
+                user.gender = data.gender,
+                user.phonenumber = data.phoneNumber,
+                user.image = data.avatar,
 
                 await user.save()
                 resolve({

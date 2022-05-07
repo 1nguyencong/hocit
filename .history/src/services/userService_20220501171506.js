@@ -117,8 +117,6 @@ let createNewUser = (data) => {
                     phonenumber: data.phoneNumber,
                     gender: data.gender,
                     roleId: data.role,
-                    positionId: data.position,
-                    image: data.avatar,
                 })
                 resolve({
                     errCode: 0,
@@ -156,7 +154,7 @@ let deleteUser= (userId) => {
 let updateUserData = (data) => {
     return new Promise(async (resolve, reject) => {
         try{
-            if (!data.id || !data.roleId || !data.positionId || !data.gender) {
+            if (!data.id) {
                 resolve({
                     errCode: 2,
                     errMessage: 'bat buoc nhap id'
@@ -168,16 +166,9 @@ let updateUserData = (data) => {
                 raw: false
             })
             if (user) { 
-                user.firstName = data.firstName;
-                user.lastName = data.lastName;
-                user.address = data.address;
-                user.roleId = data.roleId;
-                user.positionId = data.positionId;
-                user.gender = data.gender;
-                user.phonenumber = data.phoneNumber;
-                if (data.avatar) {
-                    user.image = data.avatar;
-                }
+                user.firstName = data.firstName,
+                user.lastName = data.lastName,
+                user.address = data.address,
 
                 await user.save()
                 resolve({
