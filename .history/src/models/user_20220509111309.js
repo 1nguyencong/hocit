@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsTo(models.Allcode, { foreignkey: 'gender', targetKey: 'keyMap', as: 'genderData' })
     }
   };
-  User.init({ 
+  User.init({
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     firstName: DataTypes.STRING,

@@ -156,7 +156,7 @@ let deleteUser= (userId) => {
 let updateUserData = (data) => {
     return new Promise(async (resolve, reject) => {
         try{
-            if (!data.id || !data.positionId || !data.roleId || !data.gender) {
+            if (!data.id) {
                 resolve({
                     errCode: 2,
                     errMessage: 'bat buoc nhap id'
@@ -174,7 +174,7 @@ let updateUserData = (data) => {
                 user.roleId = data.roleId;
                 user.positionId = data.positionId;
                 user.gender = data.gender;
-                user.phonenumber = data.phonenumber;
+                user.phonenumber = data.phoneNumber;
                 if (data.avatar) {
                     user.image = data.avatar;
                 }

@@ -114,10 +114,10 @@ let createNewUser = (data) => {
                     firstName: data.firstName,
                     lastName: data.lastName,
                     address: data.address,
-                    phonenumber: data.phonenumber,
-                    gender: data.gender,
-                    roleId: data.roleId,
-                    positionId: data.positionId,
+                    phonenumber: data.phoneNumber,
+                    gender: data.genderId,
+                    roleId: data.role,
+                    positionId: data.position,
                     image: data.avatar,
                 })
                 resolve({
@@ -156,7 +156,7 @@ let deleteUser= (userId) => {
 let updateUserData = (data) => {
     return new Promise(async (resolve, reject) => {
         try{
-            if (!data.id || !data.positionId || !data.roleId || !data.gender) {
+            if (!data.id) {
                 resolve({
                     errCode: 2,
                     errMessage: 'bat buoc nhap id'
@@ -174,7 +174,7 @@ let updateUserData = (data) => {
                 user.roleId = data.roleId;
                 user.positionId = data.positionId;
                 user.gender = data.gender;
-                user.phonenumber = data.phonenumber;
+                user.phonenumber = data.phoneNumber;
                 if (data.avatar) {
                     user.image = data.avatar;
                 }
